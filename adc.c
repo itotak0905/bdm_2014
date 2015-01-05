@@ -8,7 +8,7 @@
 
 int speed = 10000000; //通信速度(Hz)
 unsigned char *buff; //送受信用バッファ
-
+int adc_value;
 
 int adc_init(void)
 {
@@ -23,18 +23,27 @@ int adc_init(void)
 /*     } */
 /*     pinMode(SS_PORT, OUTPUT); //22pinを出力に設定 */
 /*     digitalWrite(SS_PORT, 1); //SS信号初期化 */
-/*     *buff = 0x0; //バッファ初期化 */
+    *buff = 0x0; //バッファ初期化
 
     return 0;
 }
 
 int adc_get_value(int ch)
 {
-    /* *buff = 0x24; //送信用データをバッファにセット */
+    *buff = 0b01101000; //送信用データをバッファにセット
     /* digitalWrite(SS_PORT, 0); //SS信号をLOW出力にして通信開始 */
     /* wiringPiSPIDataRW(ch, buff, 1); //データ送受信 */
     /* digitalWrite(SS_PORT, 1); //SS信号をHIGH出力にして通信終了 */
 
     printf("0x%x\n", *buff); //受信データを出力
+    adc_value = (*buff << 8);
 
+    *buff = 0; //送信用データをバッファにセット
+    /* digitalWrite(SS_PORT, 0); //SS信号をLOW出力にして通信開始 */
+    /* wiringPiSPIDataRW(ch, buff, 1); //データ送受信 */
+    /* digitalWrite(SS_PORT, 1); //SS信号をHIGH出力にして通信終了 */
+
+    printf("0x%x\n", *buff); //受信データを出力
+    adc_value += *buff;    
+    printf ("ch0 : %d\n",adc_value);
 }
