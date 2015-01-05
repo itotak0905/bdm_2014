@@ -1,3 +1,6 @@
+#include "mylib.h"
+#include "library.h"
+
 int main(void)
 {
     /* init周りゴニョゴニョ */

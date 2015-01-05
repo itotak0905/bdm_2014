@@ -1,8 +1,8 @@
 /* 心拍数計からとった電圧値をSPI経由で取得するプログラム郡 */
-#include <wiringPiSPI.h>
-#include <wiringPi.h>
-#include <stdio.h>
 //定数定義
+#include "mylib.h"
+#include "library.h"
+
 #define SS_PORT 22 //GPIO 22
 #define SPI_CHANNEL 0 //SPIチャンネル
 
