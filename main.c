@@ -4,9 +4,7 @@
 int main(void)
 {
     /* init周りゴニョゴニョ */
-    all_led_init();
-    /* adc_init(); */
-    /* sound_init(); */
+    all_init();
 
     printf("test\n");
 

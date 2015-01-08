@@ -4,5 +4,6 @@
 #include "adc.h"
 #include "gpio.h"
 #include "sound.h"
+#include "init.h"
 
 #endif

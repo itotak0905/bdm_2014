@@ -10,9 +10,6 @@ static led_t rled_status;
 
 int all_led_init(void)
 { 
-    // Initialize WiringPi
-    if(wiringPiSetupGpio() == -1) return 1;
-
     // Set fcled pin to output mode
     pinMode(FCLED_R_PIN, OUTPUT);
     pinMode(FCLED_G_PIN, OUTPUT);
