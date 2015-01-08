@@ -90,7 +90,7 @@ int fcled_status_update(void)
 	     break;
 	}
     }
-    /* printf("color:%d, data %d\n",fcled_status.color,fcled_status.data); */
+    printf("color:%d, data %d\n",fcled_status.color,fcled_status.data);
     return 0;
 }
 

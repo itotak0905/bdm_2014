@@ -13,6 +13,12 @@ int adc_init(void)
 
     pinMode(SPI_SS_PORT, OUTPUT); //22pinを出力に設定
     digitalWrite(SPI_SS_PORT, 1); //SS信号初期化
+
+    buff = (unsigned char *)malloc(8);
+    if (buff == NULL) {
+	printf("malloc error\n");
+	return 1;
+    }
     *buff = 0x0; //バッファ初期化
 
     return 0;
