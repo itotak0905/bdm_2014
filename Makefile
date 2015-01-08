@@ -9,9 +9,9 @@ OUT = a.out
 
 
 a.out: $(OBJS)
-	$(CC) -o $@ $(OBJS)
+	$(CC) -o $@ $(OBJS) $(CFLAGS)
 .c.o:	
-	$(CC) $(CFLAGS) -c $<
+	$(CC) -c $< $(CFLAGS)
 .PHONY: clean
 clean:
 	rm -f $(OBJS) $(DEPS) $(OUT)
