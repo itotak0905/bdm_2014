@@ -10,6 +10,8 @@ static int speed = 10000000; //通信速度(Hz)
 static unsigned char *buff; //送受信用バッファ
 static int adc_value;
 
+static const double V_REF = 3.3;
+
 int adc_init(void)
 {
 /*     if((wiringPiSPISetup (SPI_CHANNEL, speed)) < 0){ //SPIチャンネル初期化 */
@@ -45,7 +47,7 @@ int adc_get_value(int ch)
     adc_value += *buff;   
  
     printf ("ch  :\traw,\tvoltege\n");
-    printf ("ch0 :\t%4d,\t%3.2lf\n", adc_value, adc_value*5.0/4096);
+    printf ("ch0 :\t%4d,\t%3.2lf\n", adc_value, adc_value*V_REF/4096);
 
     return 0;
 }
