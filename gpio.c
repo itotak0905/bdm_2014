@@ -19,7 +19,7 @@ int led_init(void)
 
     led_status.color = RED;
     led_status.duty = 0;
-    led_status.mode = OFF;
+    led_status.data = OFF;
     return 0;
 }
 
@@ -33,7 +33,9 @@ int led_set_color(int new_color)
 
 int led_set_data(int new_data)
 {
-    if (new_mode != ON || new_mode != OFF) return 1;
+    if (new_data != ON && new_data != OFF) {
+	return 1;
+    }
 
     led_status.data = new_data;
     return 0;
@@ -47,16 +49,20 @@ int led_set_duty(int new_duty)
 
 int led_status_update(void)
 {
-    if (led_status.mode) {
+    digitalWrite(LED_R_PIN, 0);
+    digitalWrite(LED_G_PIN, 0);
+    digitalWrite(LED_B_PIN, 0);
+
+    if (led_status.data) {
 	switch(led_status.color) {
 	case RED:
 	     digitalWrite(LED_R_PIN, 1);
 	     break;
 	case BLUE:
-	     digitalWrite(LED_R_PIN, 1);
+	     digitalWrite(LED_B_PIN, 1);
 	     break;
 	case GREEN:
-	     digitalWrite(LED_R_PIN, 1);
+	     digitalWrite(LED_G_PIN, 1);
 	     break;
 	default:
 	     digitalWrite(LED_R_PIN, 0);
@@ -65,5 +71,6 @@ int led_status_update(void)
 	     break;
 	}
     }
+    /* printf("color:%d, data %d\n",led_status.color,led_status.data); */
     return 0;
 }
