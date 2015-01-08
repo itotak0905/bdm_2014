@@ -12,7 +12,7 @@ int sound_init(void)
 
 int sound_set_title(const char* title)
 {
-    snprintf(command, sizeof(command), "aplay %s", title); 
+    snprintf(command, sizeof(command), "aplay %s&", title); 
     //さすがにアカンか?
     return 0;
 }

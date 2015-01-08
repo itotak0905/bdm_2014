@@ -5,9 +5,11 @@ int main(void)
 {
     /* init周りゴニョゴニョ */
     printf("test\n");
-    while(1) {
-	/* 通常動作ゴニョゴニョ */
-    }
-
+    sound_set_title("Rear_Center.wav");
+    sound_start();
+    printf("test2\n");
+    fflush(stdout);
+    usleep(100000);
+    sound_start();
     return 0;
 }
