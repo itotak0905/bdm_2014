@@ -8,7 +8,15 @@
 static led_t led_status;
 
 int led_init(void)
-{
+{ 
+    // Initialize WiringPi
+    if(wiringPiSetupGpio() == -1) return 1;
+
+    // Set led pin to output mode
+    pinMode(LED_R_PIN, OUTPUT);
+    pinMode(LED_G_PIN, OUTPUT);
+    pinMode(LED_B_PIN, OUTPUT);
+
     led_status.color = RED;
     led_status.duty = 0;
     led_status.mode = OFF;
