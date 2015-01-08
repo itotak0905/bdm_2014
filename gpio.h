@@ -17,7 +17,7 @@ typedef struct _led
 {
     int color;
     int duty;
-    int mode;
+    int data;
 }led_t;
 
 int led_init(void);
@@ -26,7 +26,7 @@ int led_set_color(int new_color);
 
 int led_set_duty(int new_duty);
 
-int led_set_mode(int new_mode);
+int led_set_data(int new_data);
 
 int led_status_update(void);
 

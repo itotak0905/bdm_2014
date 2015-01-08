@@ -23,11 +23,11 @@ int led_set_color(int new_color)
     return 0;
 }
 
-int led_set_mode(int new_mode)
+int led_set_data(int new_data)
 {
     if (new_mode != ON || new_mode != OFF) return 1;
 
-    led_status.mode = new_mode;
+    led_status.data = new_data;
     return 0;
 }
 
