@@ -1,6 +1,7 @@
 *.o
 *.a
 *~
+*.wav
 a.out
 bin
 jtag
