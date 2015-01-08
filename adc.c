@@ -45,3 +45,9 @@ int adc_get_value(int ch)
 
     return 0;
 }
+
+int free_buff(void)
+{
+    free(buff);
+    return 0;
+}

@@ -15,5 +15,7 @@ int main(void)
     all_led_status_update();
     usleep(500000);
     
+    free_buff();
+
     return 0;
 }

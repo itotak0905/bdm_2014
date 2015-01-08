@@ -8,4 +8,6 @@ int adc_init(void);
 
 int adc_get_value(int ch);
 
+int free_buff(void);
+
 #endif
