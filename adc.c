@@ -30,20 +30,19 @@ int adc_init(void)
 
 int adc_get_value(int ch)
 {
-    *buff = 0b01101000; //送信用データをバッファにセット
+    //mcp3204用
+    *buff = 0b00000110; //送信用データをバッファにセット(先頭5bitはダミー)
     /* digitalWrite(SS_PORT, 0); //SS信号をLOW出力にして通信開始 */
     /* wiringPiSPIDataRW(ch, buff, 1); //データ送受信 */
-    /* digitalWrite(SS_PORT, 1); //SS信号をHIGH出力にして通信終了 */
 
-    printf("0x%x\n", *buff); //受信データを出力
-    adc_value = (*buff << 8);
+    *buff = 0b00000000; //送信用データをバッファにセット(後方6bitはダミー)
+    /* wiringPiSPIDataRW(ch, buff, 1); //データ送受信 */
+    adc_value = ((*buff&0xF) << 8);
 
-    *buff = 0; //送信用データをバッファにセット
-    /* digitalWrite(SS_PORT, 0); //SS信号をLOW出力にして通信開始 */
+    *buff = 0; //送信用データをバッファにセット(ダミー)
     /* wiringPiSPIDataRW(ch, buff, 1); //データ送受信 */
     /* digitalWrite(SS_PORT, 1); //SS信号をHIGH出力にして通信終了 */
-
-    printf("0x%x\n", *buff); //受信データを出力
     adc_value += *buff;    
+
     printf ("ch0 : %d\n",adc_value);
 }
