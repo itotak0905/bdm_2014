@@ -6,9 +6,9 @@
 #define SS_PORT 22 //GPIO 22
 #define SPI_CHANNEL 0 //SPIチャンネル
 
-int speed = 10000000; //通信速度(Hz)
-unsigned char *buff; //送受信用バッファ
-int adc_value;
+static int speed = 10000000; //通信速度(Hz)
+static unsigned char *buff; //送受信用バッファ
+static int adc_value;
 
 int adc_init(void)
 {
@@ -46,4 +46,6 @@ int adc_get_value(int ch)
  
     printf ("ch  :\traw,\tvoltege\n");
     printf ("ch0 :\t%4d,\t%3.2lf\n", adc_value, adc_value*5.0/4096);
+
+    return 0;
 }
