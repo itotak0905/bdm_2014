@@ -42,18 +42,18 @@ int led_status_update(void)
     if (led_status.mode) {
 	switch(led_status.color) {
 	case RED:
-	     /* digitalWrite(LED_R_PIN, 1); */
+	     digitalWrite(LED_R_PIN, 1);
 	     break;
 	case BLUE:
-	     /* digitalWrite(LED_R_PIN, 1); */
+	     digitalWrite(LED_R_PIN, 1);
 	     break;
 	case GREEN:
-	     /* digitalWrite(LED_R_PIN, 1); */
+	     digitalWrite(LED_R_PIN, 1);
 	     break;
 	default:
-	     /* digitalWrite(LED_R_PIN, 0); */
-	     /* digitalWrite(LED_G_PIN, 0); */
-	     /* digitalWrite(LED_B_PIN, 0); */
+	     digitalWrite(LED_R_PIN, 0);
+	     digitalWrite(LED_G_PIN, 0);
+	     digitalWrite(LED_B_PIN, 0);
 	     break;
 	}
     }

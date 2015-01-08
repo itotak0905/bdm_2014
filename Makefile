@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -lwiringPi
 
 SRCS = $(shell find . -name "*.c")
 HEADS = $(shell find . -name "*.h")

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-/* #include <wiringPiSPI.h> */
-/* #include <wiringPi.h> */
+#include <wiringPiSPI.h>
+#include <wiringPi.h>
 
 #endif
