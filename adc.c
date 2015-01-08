@@ -42,7 +42,8 @@ int adc_get_value(int ch)
     *buff = 0; //送信用データをバッファにセット(ダミー)
     /* wiringPiSPIDataRW(ch, buff, 1); //データ送受信 */
     /* digitalWrite(SS_PORT, 1); //SS信号をHIGH出力にして通信終了 */
-    adc_value += *buff;    
-
-    printf ("ch0 : %d\n",adc_value);
+    adc_value += *buff;   
+ 
+    printf ("ch  :\traw,\tvoltege\n");
+    printf ("ch0 :\t%4d,\t%3.2lf\n", adc_value, adc_value*5.0/4096);
 }
