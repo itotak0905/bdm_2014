@@ -1,7 +1,7 @@
 #include "mylib.h"
 #include "library.h"
 
-static int spi_speed = 10000000; //通信速度(Hz)
+static int spi_speed = 10000; //通信速度(Hz)
 
 int all_init(void)
 {
