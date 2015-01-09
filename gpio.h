@@ -17,7 +17,9 @@
 
 typedef struct _fcled
 {
-    int color;
+    int color_r;
+    int color_g;
+    int color_b;
     int duty;
     int data;
 }fcled_t;
@@ -30,7 +32,7 @@ typedef struct _led
 
 int all_led_init(void);
 
-int fcled_set_color(int new_color);
+int fcled_set_color_value(int new_color, int new_value);
 
 int fcled_set_duty(int new_duty);
 
