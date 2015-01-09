@@ -36,7 +36,7 @@ int fcled_set_color_value(int new_color, int new_value)
 {
     if (new_color >= FCLED_COLOR_NUM || new_color < 0) return 1;
     if (new_value > 100) new_value = 100;
-    else (new_value < 0) new_value = 0;
+    else if (new_value < 0) new_value = 0;
     switch (new_color) {
     case RED:
 	fcled_status.color_r = new_value;
@@ -92,13 +92,13 @@ int fcled_status_update(void)
     digitalWrite(FCLED_B_PIN, 0);
 
     if (fcled_status.data) {
-	if (color_r > counter) {
+	if (fcled_status.color_r > counter) {
 	    digitalWrite(FCLED_R_PIN, 1);
 	}
-	if (color_g > counter) {
+	if (fcled_status.color_g > counter) {
 	    digitalWrite(FCLED_G_PIN, 1);
 	}
-	if (color_b > counter) {
+	if (fcled_status.color_b > counter) {
 	    digitalWrite(FCLED_B_PIN, 1);
 	}
 
