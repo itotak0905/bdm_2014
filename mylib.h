@@ -6,5 +6,6 @@
 #include "sound.h"
 #include "init.h"
 #include "udp.h"
+#include "read_serial.h"
 
 #endif

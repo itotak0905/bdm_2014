@@ -3,6 +3,12 @@
 
 #define BUF_SIZE 2048
 
+/* #define BDM_OUTPUT */
+/* #define BDM_BRAIN */
+#define BDM_HEART
+
+//出力系
+#ifdef BDM_OUTPUT
 int main(void)
 {
     /* init周りゴニョゴニョ */
@@ -11,33 +17,64 @@ int main(void)
     struct sockaddr_in addr;
     char buf[BUF_SIZE];
 
-    printf("test\n");
-
-    
-    int value, counter, state;
-    state = counter = 0;
-    for (;;) {
-	value = adc_get_value(0);
-	printf("%d\n",value);
-	if (value > 600) {
-	    if (counter <= 3) {
-		counter++;
-	    }
-	    if (counter == 4) 
-		rled_set_data(ON);
-	} else {
-	    if (counter >= 1) {
-		counter--;
-	    }
-	    if (counter == 0) {
-		rled_set_data(OFF);
-	    }
-	}
+    printf("test output\n");
+    while(1){
 	
 	all_led_status_update();
-	usleep(10000);
     }
+    
     free_buff();
 
     return 0;
 }
+#endif
+
+//脳波系
+#ifdef BDM_BRAIN 
+int main(void)
+{
+    /* init周りゴニョゴニョ */
+    all_init();
+    
+    struct sockaddr_in addr;
+    char buf[BUF_SIZE];
+    printf("test brain\n");
+
+    int fd = serial_open();
+    listen_loop(fd);
+    serial_close(fd);
+
+
+    while(1){
+	
+    }
+    
+    free_buff();
+
+    return 0;
+}
+#endif
+
+//心拍系
+#ifdef BDM_HEART
+int main(void)
+{
+    /* init周りゴニョゴニョ */
+    all_init();
+    
+    struct sockaddr_in addr;
+    char buf[BUF_SIZE];
+    
+    printf("test heart\n");
+    
+    int value;
+    while(1){
+	value = adc_get_value(0);
+	usleep(1*1000); /* 1ms */
+    }
+    
+    free_buff();
+
+    return 0;
+}
+#endif
