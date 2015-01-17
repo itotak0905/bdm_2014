@@ -1,7 +1,6 @@
 /* 心拍数計からとった電圧値をSPI経由で取得するプログラム郡 */
-//定数定義
-#include "mylib.h"
 #include "library.h"
+#include "mylib.h"
 
 static unsigned char *buff; //送受信用バッファ
 static int adc_value;

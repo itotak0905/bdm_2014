@@ -7,7 +7,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/ioctl.h>
- #include <errno.h>  
+#include <errno.h>  
+#include <arpa/inet.h>
 
 #include <wiringPiSPI.h>
 #include <wiringPi.h>

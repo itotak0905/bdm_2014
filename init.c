@@ -1,5 +1,5 @@
-#include "mylib.h"
 #include "library.h"
+#include "mylib.h"
 
 static int spi_speed = 10000; //通信速度(Hz)
 

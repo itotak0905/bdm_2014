@@ -6,46 +6,37 @@
 int main(void)
 {
     /* init周りゴニョゴニョ */
-    /* all_init(); */
+    all_init();
     
-    int sock;
     struct sockaddr_in addr;
     char buf[BUF_SIZE];
 
-    sock = udp_send_init(&addr);
-
-
     printf("test\n");
-
     
-    int i;
-    int value;
+    int value, counter, state;
+    state = counter = 0;
     for (;;) {
-	/* int numrcv = recvfrom(sock, buf, BUF_SIZE, 0, NULL, NULL); */
-	/* if (numrcv < 1) { */
-	/* 	if (errno == EAGAIN) { */
-	/* 		/\* まだ来ない。*\/ */
-	/* 		printf("MADA KONAI\n"); */
-	/* 	} else { */
-	/* 		perror("recv"); */
-	/* 		break; */
-	/* 	} */
-	/* } else { */
-	/* 	printf("received data\n"); */
-	/* 	printf("%s\n", buf); */
-	/* 	/\* break; *\/ */
-	/* } */
-
-	printf("sending...\n");
-	if (sendto(sock, "hello1", 6, 0, (struct sockaddr *)&addr, sizeof(addr)) == -1) {
-	    perror("send");
-	    return -1;
+	value = adc_get_value(0);
+	printf("%d\n",value);
+	if (value > 600) {
+	    if (counter <= 3) {
+		counter++;
+	    }
+	    if (counter == 4) 
+		rled_set_data(ON);
+	} else {
+	    if (counter >= 1) {
+		counter--;
+	    }
+	    if (counter == 0) {
+		rled_set_data(OFF);
+	    }
 	}
 	
+	all_led_status_update();
 	usleep(10000);
     }
-    close(sock);    
-    /* free_buff(); */
+    free_buff();
 
     return 0;
 }

@@ -1,6 +1,6 @@
 /* 音声出力に関係する関数群 */
-#include "mylib.h"
 #include "library.h"
+#include "mylib.h"
 
 static char command[256];
 
