@@ -2,8 +2,8 @@
 
 /* と思ったけど外部のライブラリ(とりあえずwiringPi)があるのでそっちを使う */
 /* と思ったけどbdmに合わせてもう少し使いやすい関数を作る */
-#include "mylib.h"
 #include "library.h"
+#include "mylib.h"
 
 static fcled_t fcled_status;
 static led_t rled_status;

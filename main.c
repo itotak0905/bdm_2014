@@ -1,35 +1,51 @@
-#include "mylib.h"
 #include "library.h"
+#include "mylib.h"
+
+#define BUF_SIZE 2048
 
 int main(void)
 {
     /* init周りゴニョゴニョ */
-    all_init();
+    /* all_init(); */
+    
+    int sock;
+    struct sockaddr_in addr;
+    char buf[BUF_SIZE];
+
+    sock = udp_send_init(&addr);
+
 
     printf("test\n");
 
-    int i = 0, j = 0;
-    int value_r,value_g,value_b;
-    for (;;) {
-	if (j % 1000 == 0) {
-	    if (i > 0 && i < 100) value_r++; 
-	    if (i > 100 && i < 200) value_g++; 
-	    if (i > 200 && i < 300) value_b++; 
-	    if (i > 300 && i < 400) value_r--; 
-	    if (i > 400 && i < 500) value_g--; 
-	    if (i > 500 && i < 600) value_b--;
-	    if (i == 600) i = 0;
-	    i++;
-	}
-	j++;
-	fcled_set_color_value(RED, value_r);
-	fcled_set_color_value(GREEN, value_g);
-	fcled_set_color_value(BLUE, value_B);
-	all_led_status_update();
-	usleep(100);
-    }
     
-    free_buff();
+    int i;
+    int value;
+    for (;;) {
+	/* int numrcv = recvfrom(sock, buf, BUF_SIZE, 0, NULL, NULL); */
+	/* if (numrcv < 1) { */
+	/* 	if (errno == EAGAIN) { */
+	/* 		/\* まだ来ない。*\/ */
+	/* 		printf("MADA KONAI\n"); */
+	/* 	} else { */
+	/* 		perror("recv"); */
+	/* 		break; */
+	/* 	} */
+	/* } else { */
+	/* 	printf("received data\n"); */
+	/* 	printf("%s\n", buf); */
+	/* 	/\* break; *\/ */
+	/* } */
+
+	printf("sending...\n");
+	if (sendto(sock, "hello1", 6, 0, (struct sockaddr *)&addr, sizeof(addr)) == -1) {
+	    perror("send");
+	    return -1;
+	}
+	
+	usleep(10000);
+    }
+    close(sock);    
+    /* free_buff(); */
 
     return 0;
 }
