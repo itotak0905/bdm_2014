@@ -12,6 +12,7 @@ int main(void)
     char buf[BUF_SIZE];
 
     printf("test\n");
+
     
     int value, counter, state;
     state = counter = 0;
