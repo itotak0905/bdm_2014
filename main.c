@@ -3,9 +3,9 @@
 
 #define BUF_SIZE 2048
 
-/* #define BDM_OUTPUT */
+#define BDM_OUTPUT
 /* #define BDM_BRAIN */
-#define BDM_HEART
+/* #define BDM_HEART */
 
 //出力系
 #ifdef BDM_OUTPUT
@@ -21,6 +21,7 @@ int main(void)
     while(1){
 	
 	all_led_status_update();
+	usleep(1*1000);
     }
     
     free_buff();
