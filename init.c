@@ -17,9 +17,7 @@ int all_init(void)
     }
 
     all_led_init();
-    printf("led\n");
     adc_init();
-    printf("adc\n");
     sound_init();
 
     return 0;
