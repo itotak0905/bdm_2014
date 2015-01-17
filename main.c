@@ -3,9 +3,9 @@
 
 #define BUF_SIZE 2048
 
-#define BDM_OUTPUT
-/* #define BDM_BRAIN */
-/* #define BDM_HEART */
+//#define BDM_OUTPUT
+//#define BDM_BRAIN
+#define BDM_HEART
 
 //出力系
 #ifdef BDM_OUTPUT
@@ -66,11 +66,22 @@ int main(void)
     struct sockaddr_in addr;
     char buf[BUF_SIZE];
     
-    printf("test heart\n");
-    
-    int value;
+    printf("#test heart\n");
+    printf("#sec(ms) value\n");
+#define SPAN 150
+    int i,value[SPAN],sec=0,total=0;
+    for (i=0;i<SPAN;i++) value[i]=0;
     while(1){
-	value = adc_get_value(0);
+	total -= value[sec%SPAN];
+	value[sec%SPAN] = adc_get_value(0);
+	total += value[sec%SPAN];
+	printf("%5d %d %4.1f ",sec,value[sec%SPAN], total*1.0/SPAN);
+	if (value[sec%SPAN] >  total*1.0/SPAN) {
+	    printf("O\n");
+	} else {
+	    printf("\n");
+	}
+	sec++;
 	usleep(1*1000); /* 1ms */
     }
     
