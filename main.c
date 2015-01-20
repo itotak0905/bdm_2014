@@ -39,17 +39,17 @@ int main(void)
     
     struct sockaddr_in addr;
     char buf[BUF_SIZE];
+    int meditation, attention;
     printf("test brain\n");
 
     int fd = serial_open();
-    listen_loop(fd);
-    serial_close(fd);
-
 
     while(1){
-	
+	listen_once(fd);
+	meditation = get_meditation();
+	attention = get_attention();
     }
-    
+    serial_close(fd);    
     free_buff();
 
     return 0;

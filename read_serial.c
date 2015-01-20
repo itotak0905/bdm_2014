@@ -27,6 +27,9 @@
 #define CODE_ASIC_EEG_POWER 0x83
 #define CODE_RRINTERVAL 0x86
 
+static int meditation = 0;
+static int attention = 0;
+
 // シリアル通信を開始する
 int  serial_open(void);
 
@@ -38,6 +41,16 @@ void listen_loop(int fd);
 
 // データペイロードを処理する
 void read_payload(uint8_t payload[], int plength);
+
+int get_meditation(void)
+{
+    return meditation;
+}
+
+int get_attention(void)
+{
+    return attention;
+}
 
 void read_payload(uint8_t payload[], int plength)
 {
@@ -64,29 +77,33 @@ void read_payload(uint8_t payload[], int plength)
                 case CODE_ATTENTION:
                     if (payload[head + 1] == 0){
                         printf("ATTENTION:unable to calculate. ");
+			attention = -1;
                     }else{
                         printf("ATTENTION:%d ", payload[head + 1]);
+			attention = payload[head + 1];
                     }
                     output_flag = true;
                     break;
                 case CODE_MEDITATION:
                     if (payload[head + 1] == 0){
                         printf("MEDITATION:unable to calculate. ");
+			meditation = -1;
                     }else{
                         printf("MEDITATION:%d ", payload[head + 1]);
+			meditation = payload[head + 1];
                     }
                     output_flag = true;
                     break;
                 case CODE_SINGLE_RAW:
                     /*
-                    printf("8bit_RAW:%d ", payload[head + 1]);
-                    output_flag = true;
+		      printf("8bit_RAW:%d ", payload[head + 1]);
+		      output_flag = true;
                     */
                     break;
                 case CODE_RAW_MARKER:
                     /*
-                    printf("RAW_MARKER:%d ", payload[head + 1]);
-                    output_flag = true;
+		      printf("RAW_MARKER:%d ", payload[head + 1]);
+		      output_flag = true;
                     */
                     break;
                 default:
@@ -100,34 +117,34 @@ void read_payload(uint8_t payload[], int plength)
                 switch (payload[head]){
                 case CODE_MULTI_RAW:
                     /*
-                    printf("16bit_RAW:%d ", (int16_t)((payload[head + 2] << 8) | payload[head + 3]));
-                    output_flag = true;
+		      printf("16bit_RAW:%d ", (int16_t)((payload[head + 2] << 8) | payload[head + 3]));
+		      output_flag = true;
                     */
                     break;
                 case CODE_EEG_POWER:
                     /*
-                    printf("DELTA:%f ", (float)((payload[head + 2] << 24) | (payload[head + 3] << 16) | (payload[head + 4] << 8) | payload[head + 5]));
-                    printf("THETA:%f ", (float)((payload[head + 6] << 24) | (payload[head + 7] << 16) | (payload[head + 8] << 8) | payload[head + 9]));
-                    printf("LOW_ALPHA:%f ", (float)((payload[head + 10] << 24) | (payload[head + 11] << 16) | (payload[head + 12] << 8) | payload[head + 13]));
-                    printf("HIGH_ALPHA:%f ", (float)((payload[head + 14] << 24) | (payload[head + 15] << 16) | (payload[head + 16] << 8) | payload[head + 17]));
-                    printf("LOW_BETA:%f ", (float)((payload[head + 18] << 24) | (payload[head + 19] << 16) | (payload[head + 20] << 8) | payload[head + 21]));
-                    printf("HIGH_BETA:%f ", (float)((payload[head + 22] << 24) | (payload[head + 23] << 16) | (payload[head + 24] << 8) | payload[head + 25]));
-                    printf("LOW_GAMMA:%f ", (float)((payload[head + 26] << 24) | (payload[head + 27] << 16) | (payload[head + 28] << 8) | payload[head + 29]));
-                    printf("MIDDLE_GAMMA:%f ", (float)((payload[head + 30] << 24) | (payload[head + 31] << 16) | (payload[head + 32] << 8) | payload[head + 33]));
-                    output_flag = true;
+		      printf("DELTA:%f ", (float)((payload[head + 2] << 24) | (payload[head + 3] << 16) | (payload[head + 4] << 8) | payload[head + 5]));
+		      printf("THETA:%f ", (float)((payload[head + 6] << 24) | (payload[head + 7] << 16) | (payload[head + 8] << 8) | payload[head + 9]));
+		      printf("LOW_ALPHA:%f ", (float)((payload[head + 10] << 24) | (payload[head + 11] << 16) | (payload[head + 12] << 8) | payload[head + 13]));
+		      printf("HIGH_ALPHA:%f ", (float)((payload[head + 14] << 24) | (payload[head + 15] << 16) | (payload[head + 16] << 8) | payload[head + 17]));
+		      printf("LOW_BETA:%f ", (float)((payload[head + 18] << 24) | (payload[head + 19] << 16) | (payload[head + 20] << 8) | payload[head + 21]));
+		      printf("HIGH_BETA:%f ", (float)((payload[head + 22] << 24) | (payload[head + 23] << 16) | (payload[head + 24] << 8) | payload[head + 25]));
+		      printf("LOW_GAMMA:%f ", (float)((payload[head + 26] << 24) | (payload[head + 27] << 16) | (payload[head + 28] << 8) | payload[head + 29]));
+		      printf("MIDDLE_GAMMA:%f ", (float)((payload[head + 30] << 24) | (payload[head + 31] << 16) | (payload[head + 32] << 8) | payload[head + 33]));
+		      output_flag = true;
                     */
                     break;
                 case CODE_ASIC_EEG_POWER:
                     /*
-                    printf("DELTA:%d ", (uint32_t)((payload[head + 2] << 16) | (payload[head + 3] << 8) | payload[head + 4]));
-                    printf("THETA:%d ", (uint32_t)((payload[head + 5] << 16) | (payload[head + 6] << 8) | payload[head + 7]));
-                    printf("LOW_ALPHA:%d ", (uint32_t)((payload[head + 8] << 16) | (payload[head + 9] << 8) | payload[head + 10]));
-                    printf("HIGH_ALPHA:%d ", (uint32_t)((payload[head + 11] << 16) | (payload[head + 12] << 8) | payload[head + 13]));
-                    printf("LOW_BETA:%d ", (uint32_t)((payload[head + 14] << 16) | (payload[head + 15] << 8) | payload[head + 16]));
-                    printf("HIGH_BETA:%d ", (uint32_t)((payload[head + 17] << 16) | (payload[head + 18] << 8) | payload[head + 19]));
-                    printf("LOW_GAMMA:%d ", (uint32_t)((payload[head + 20] << 16) | (payload[head + 21] << 8) | payload[head + 22]));
-                    printf("MIDDLE_GAMMA:%d ", (uint32_t)((payload[head + 23] << 16) | (payload[head + 24] << 8) | payload[head + 25]));
-                    output_flag = true;
+		      printf("DELTA:%d ", (uint32_t)((payload[head + 2] << 16) | (payload[head + 3] << 8) | payload[head + 4]));
+		      printf("THETA:%d ", (uint32_t)((payload[head + 5] << 16) | (payload[head + 6] << 8) | payload[head + 7]));
+		      printf("LOW_ALPHA:%d ", (uint32_t)((payload[head + 8] << 16) | (payload[head + 9] << 8) | payload[head + 10]));
+		      printf("HIGH_ALPHA:%d ", (uint32_t)((payload[head + 11] << 16) | (payload[head + 12] << 8) | payload[head + 13]));
+		      printf("LOW_BETA:%d ", (uint32_t)((payload[head + 14] << 16) | (payload[head + 15] << 8) | payload[head + 16]));
+		      printf("HIGH_BETA:%d ", (uint32_t)((payload[head + 17] << 16) | (payload[head + 18] << 8) | payload[head + 19]));
+		      printf("LOW_GAMMA:%d ", (uint32_t)((payload[head + 20] << 16) | (payload[head + 21] << 8) | payload[head + 22]));
+		      printf("MIDDLE_GAMMA:%d ", (uint32_t)((payload[head + 23] << 16) | (payload[head + 24] << 8) | payload[head + 25]));
+		      output_flag = true;
                     */
                     break;
                 case CODE_RRINTERVAL:
@@ -195,6 +212,54 @@ void listen_loop(int fd){
             /* 次のパケットを読む準備 */
             head += plength + 4;
         }
+    }
+}
+
+void listen_once(int fd){
+    uint8_t buf[BUFSIZE];
+    int head = 0;
+    // headが正の場合は、headだけbufの先頭が埋まっている
+    int read_size = read(fd, &(buf[head]), BUFSIZE - head) + head; // パケットを受信
+    if (read_size == 0) puts("failed to receive packets");
+    // printf("read: %d\n", read_size);
+    head = 0;
+    while (true){
+	if (read_size - head < 3){ // 受信したパケットの残りが3バイト未満なら再度受信する
+	    memmove(buf, &(buf[head]), read_size - head);
+	    head = read_size - head;
+	    break;
+	}
+	/* ヘッダ */
+	if (buf[head + 0] != SYNC){ // ヘッダのSYNCが不正な場合
+	    head++;
+	    continue;
+	}
+	if (buf[head + 1] != SYNC){ // ヘッダのSYNCが不正な場合
+	    head += 2;
+	    continue;
+	}
+	int plength = buf[head + 2]; // ペイロード長
+	if (plength > 169){ // ペイロード長が不正な場合
+	    head++;
+	    continue;
+	}
+	if (read_size - head < plength + 4){ // パケットの残りの長さが足りない場合
+	    memmove(buf, &(buf[head]), read_size - head);
+	    head = read_size - head;
+	    break;
+	}
+	/* チェックサム */
+	int i;
+	uint8_t sum = 0;
+	for (i = 0; i < plength; i++) sum += buf[head + 3 + i];
+	if ((uint8_t)(~sum) != buf[head + plength + 3]){ // チェックサムの値が不正な場合
+	    head++;
+	    continue;
+	}
+	/* ペイロードの値を利用 */
+	read_payload(&(buf[head + 3]), plength);
+	/* 次のパケットを読む準備 */
+	head += plength + 4;
     }
 }
 
