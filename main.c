@@ -22,6 +22,10 @@ int main(void)
 
     sock_heart = udp_receive_init(&addr_heart, UDP_PORT_HEART);
     sock_brain = udp_receive_init(&addr_brain, UDP_PORT_BRAIN);
+    if (sock_heart == -1 || sock_brain == -1) {
+	perror("socket:");
+	return 1;
+    }
 
     printf("#test output\n");
     while(1){
@@ -87,7 +91,10 @@ int main(void)
     int meditation, attention;
 
     sock = udp_send_init(&addr, UDP_PORT_BRAIN);
-
+    if (sock == -1) {
+	perror("socket:");
+	return 1;
+    }
     printf("#test brain\n");
 
     /* int fd = serial_open(); */
@@ -121,6 +128,10 @@ int main(void)
     char buf[BUF_SIZE];
 
     sock = udp_send_init(&addr, UDP_PORT_HEART);
+    if (sock == -1) {
+	perror("socket:");
+	return 1;
+    }
 
     printf("#test heart\n");
     printf("#sec(ms) value\n");
