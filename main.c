@@ -5,18 +5,18 @@
 #define UDP_PORT_BRAIN 50000
 #define UDP_PORT_HEART 50010
 
-//#define BDM_OUTPUT
+#define BDM_OUTPUT
 //#define BDM_BRAIN
-#define BDM_HEART
+//#define BDM_HEART
 
 //出力系
 #ifdef BDM_OUTPUT
 int main(void)
 {
     /* init周りゴニョゴニョ */
-    all_init();
+    /* all_init(); */
 
-    int sock_brain, sock_heart, addrlen;
+    int sock_brain, sock_heart, addrlen, n;
     struct sockaddr_in addr_brain, addr_heart;
     char buf[BUF_SIZE];
 
@@ -30,41 +30,45 @@ int main(void)
 	addrlen = sizeof(sock_heart);
 	n = recvfrom(sock_heart, buf, sizeof(buf), 0, (struct sockaddr *)&addr_heart, &addrlen);
 	if (n < 1) {
-		if (errno == EAGAIN) {
-			/* まだ来ない。*/
-			printf("MADA KONAI heart\n");
-		} else {
-			perror("recv");
-			break;
-		}
-	} else {
-		printf("received data heart\n");
-		printf("%s\n", buf);
+	    if (errno == EAGAIN) {
+		/* まだ来ない。*/
+		printf("MADA KONAI heart\n");
+	    } else {
+		perror("recv");
 		break;
+	    }
+	} else {
+	    int num;
+	    printf("received data heart\n");
+	    sscanf(buf, "heart %d\n",&num);
+	    printf("%d\n", num);
+	    /* break; */
 	}
 
 	//脳波の処理
 	addrlen = sizeof(sock_brain);
 	n = recvfrom(sock_brain, buf, sizeof(buf), 0, (struct sockaddr *)&addr_brain, &addrlen);
 	if (n < 1) {
-		if (errno == EAGAIN) {
-			/* まだ来ない。*/
-			printf("MADA KONAI brain\n");
-		} else {
-			perror("recv");
-			break;
-		}
-	} else {
-		printf("received data brain\n");
-		printf("%s\n", buf);
+	    if (errno == EAGAIN) {
+		/* まだ来ない。*/
+		printf("MADA KONAI brain\n");
+	    } else {
+		perror("recv");
 		break;
+	    }
+	} else {
+	    int num;
+	    printf("received data brain\n");
+	    sscanf(buf, "brain %d\n",&num);
+	    printf("%d\n", num);
+	    /* break; */
 	}
-
-	all_led_status_update();
+	
+	/* all_led_status_update(); */
 	usleep(1*1000); //1ms
     }
     
-    free_buff();
+    /* free_buff(); */
 
     return 0;
 }
@@ -75,10 +79,10 @@ int main(void)
 int main(void)
 {
     /* init周りゴニョゴニョ */
-    all_init();
+    /* all_init(); */
     
     struct sockaddr_in addr;
-    int sock;
+    int sock, n, sec=0;
     char buf[BUF_SIZE];
     int meditation, attention;
 
@@ -86,18 +90,20 @@ int main(void)
 
     printf("#test brain\n");
 
-    int fd = serial_open();
+    /* int fd = serial_open(); */
 
     while(1){
 
-	listen_once(fd);
-	meditation = get_meditation();
-	attention = get_attention();
-
-	sendto(sock, "brain\n", 6, 0, (struct sockaddr *)&addr, sizeof(addr));
+	/* listen_once(fd); */
+	/* meditation = get_meditation(); */
+	/* attention = get_attention(); */
+	n = sprintf(buf, "brain %d\n", sec);
+	sendto(sock, buf, n+1, 0, (struct sockaddr *)&addr, sizeof(addr));
+	sec++;
+	usleep(1*1000); /* 1ms */
     }
-    serial_close(fd);    
-    free_buff();
+    /* serial_close(fd);     */
+    /* free_buff(); */
 
     return 0;
 }
@@ -108,9 +114,9 @@ int main(void)
 int main(void)
 {
     /* init周りゴニョゴニョ */
-    all_init();
+    /* all_init(); */
 
-    int sock;    
+    int sock, n;    
     struct sockaddr_in addr;
     char buf[BUF_SIZE];
 
@@ -124,22 +130,22 @@ int main(void)
     while(1){
 	
 	total -= value[sec%SPAN];
-	value[sec%SPAN] = adc_get_value(0);
+	value[sec%SPAN] = 0;//adc_get_value(0);
 	total += value[sec%SPAN];
-	printf("%5d %d %4.1f ",sec,value[sec%SPAN], total*1.0/SPAN);
-	if (value[sec%SPAN] >  total*1.0/SPAN) {
-	    printf("O\n");
-	} else {
-	    printf("\n");
-	}
-
-	sendto(sock, "heart\n", 6, 0, (struct sockaddr *)&addr, sizeof(addr));
+	/* printf("%5d %d %4.1f ",sec,value[sec%SPAN], total*1.0/SPAN); */
+	/* if (value[sec%SPAN] >  total*1.0/SPAN) { */
+	/*     printf("O\n"); */
+	/* } else { */
+	/*     printf("\n"); */
+	/* } */
+	n = sprintf(buf, "heart %d\n", sec);
+	sendto(sock, buf, n+1, 0, (struct sockaddr *)&addr, sizeof(addr));
 
 	sec++;
 	usleep(1*1000); /* 1ms */
     }
     
-    free_buff();
+    /* free_buff(); */
 
     return 0;
 }
