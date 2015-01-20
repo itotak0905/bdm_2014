@@ -1,7 +1,7 @@
 #include "library.h"
 #include "mylib.h"
 
-int udp_receive_init(struct sockaddr_in *p_addr)
+int udp_receive_init(struct sockaddr_in *p_addr, int port)
 {
     int sock;
 
@@ -12,7 +12,7 @@ int udp_receive_init(struct sockaddr_in *p_addr)
     }
 
     p_addr->sin_family = AF_INET;
-    p_addr->sin_port = htons(12345);
+    p_addr->sin_port = htons(port);
     p_addr->sin_addr.s_addr = INADDR_ANY;
 
     if (bind(sock, (struct sockaddr *)p_addr, sizeof(*p_addr)) == -1) {
@@ -27,7 +27,7 @@ int udp_receive_init(struct sockaddr_in *p_addr)
     return sock;
 }
 
-int udp_send_init(struct sockaddr_in *p_addr)
+int udp_send_init(struct sockaddr_in *p_addr, int port)
 {
     int sock;
 
@@ -38,7 +38,7 @@ int udp_send_init(struct sockaddr_in *p_addr)
     }
 
     p_addr->sin_family = AF_INET;
-    p_addr->sin_port = htons(12345);
+    p_addr->sin_port = htons(port);
     if (inet_aton("127.0.0.1", &p_addr->sin_addr) == 0) {
     	printf("error:inet_aton\n");
     	return -1;

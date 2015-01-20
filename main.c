@@ -2,6 +2,8 @@
 #include "mylib.h"
 
 #define BUF_SIZE 2048
+#define UDP_PORT_BRAIN 50000
+#define UDP_PORT_HEART 50010
 
 //#define BDM_OUTPUT
 //#define BDM_BRAIN
@@ -13,11 +15,15 @@ int main(void)
 {
     /* init周りゴニョゴニョ */
     all_init();
-    
-    struct sockaddr_in addr;
+
+    int sock_brain, sock_heart;
+    struct sockaddr_in addr_brain, addr_heart;
     char buf[BUF_SIZE];
 
-    printf("test output\n");
+    sock_heart = udp_receive_init(&addr_heart, UDP_PORT_HEART);
+    sock_brain = udp_receive_init(&addr_brain, UDP_PORT_BRAIN);
+
+    printf("#test output\n");
     while(1){
 	
 	all_led_status_update();
@@ -38,9 +44,13 @@ int main(void)
     all_init();
     
     struct sockaddr_in addr;
+    int sock;
     char buf[BUF_SIZE];
     int meditation, attention;
-    printf("test brain\n");
+
+    sock = udp_send_init(&addr, UDP_PORT_BRAIN);
+
+    printf("#test brain\n");
 
     int fd = serial_open();
 
@@ -62,10 +72,13 @@ int main(void)
 {
     /* init周りゴニョゴニョ */
     all_init();
-    
+
+    int sock;    
     struct sockaddr_in addr;
     char buf[BUF_SIZE];
-    
+
+    sock = udp_send_init(&addr, UDP_PORT_HEART);
+
     printf("#test heart\n");
     printf("#sec(ms) value\n");
 #define SPAN 150
