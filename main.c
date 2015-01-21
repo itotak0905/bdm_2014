@@ -16,7 +16,8 @@ int main(void)
     /* init周りゴニョゴニョ */
     all_init();
 
-    int sock_brain, sock_heart, addrlen, n;
+    int sock_brain, sock_heart;
+    socklen_t addrlen, n;
     struct sockaddr_in addr_brain, addr_heart;
     char buf[BUF_SIZE];
 
@@ -37,7 +38,7 @@ int main(void)
     while(1){
 
 	//心拍の処理 (1ms周期)
-	if (counter % 10 == 0) {
+	if (counter % 1000 == 0) {
 	    addrlen = sizeof(sock_heart);
 	    n = recvfrom(sock_heart, buf, sizeof(buf), 0, (struct sockaddr *)&addr_heart, &addrlen);
 	    if (n < 1) {
@@ -52,7 +53,8 @@ int main(void)
 		int num;
 		printf("received data heart\n");
 		sscanf(buf, "heart %d %d\n", &num, &judge);
-		printf("%d &d\n", num, judge);
+		printf("%s\n",buf);
+		printf("%d %d\n", num, judge);
 	    }
 
 	    if (judge == 1) {
@@ -62,8 +64,8 @@ int main(void)
 	    }
 
 	}
-	//脳波の処理 (100ms周期)
-	if (counter % 1000 == 0) {
+	//脳波の処理 (10ms周期)
+	if (counter % (10*1000) == 0) {
 
 	    addrlen = sizeof(sock_brain);
 	    n = recvfrom(sock_brain, buf, sizeof(buf), 0, (struct sockaddr *)&addr_brain, &addrlen);
@@ -80,14 +82,20 @@ int main(void)
 		past_attention = attention;
 		past_meditation = meditation;
 		brain_counter = 0;
-		printf("received data brain\n");
-		sscanf(buf, "brain %d &d &d\n",&num, &meditation, &attention);
-		printf("%d %d %d\n", num, meditation, attention);
+		/* printf("received data brain\n"); */
+		sscanf(buf, "brain %d %d %d\n",&num, &meditation, &attention);
+		/* printf("%s\n",buf); */
+		/* printf("%d %d %d\n", num, meditation, attention); */
 
 	    }
 	    if (brain_counter <= 10) {
-		fcled_set_color_value(RED, 100 - past_meditation + brain_counter*(meditation - past_meditation)/10.0);
-		fcled_set_color_value(BLUE, past_meditation + brain_counter*(meditation - past_meditation)/10.0);
+		if (meditation >= 0) {
+		    fcled_set_color_value(RED, 100 - past_meditation + brain_counter*(meditation - past_meditation)/10.0);
+		    fcled_set_color_value(BLUE, past_meditation + brain_counter*(meditation - past_meditation)/10.0);
+		    fcled_set_data(ON);
+		} else {
+		    fcled_set_data(OFF);
+		}
 		brain_counter++;
 	    }
 
@@ -95,10 +103,10 @@ int main(void)
 		
 	}
 
-	//出力側の更新(0.1ms周期)	    
+	//出力側の更新(1us周期)	    
 	all_led_status_update();
 	counter++;
-	usleep(1*100); //0.1ms
+	usleep(1*1); //1us
     
     }
     
@@ -134,8 +142,11 @@ int main(void)
 	listen_once(fd);
 	meditation = get_meditation();
 	attention = get_attention();
-	n = sprintf(buf, "brain %d %d %d\n", sec, meditation, attention);
-	sendto(sock, buf, n+1, 0, (struct sockaddr *)&addr, sizeof(addr));
+	if (sec % 100 == 0) { //100ms
+	    n = sprintf(buf, "brain %d %d %d\n", sec, meditation, attention);
+	    printf("%s",buf);
+	    sendto(sock, buf, n+1, 0, (struct sockaddr *)&addr, sizeof(addr));
+	}
 	sec++;
 	usleep(1*1000); /* 1ms */
     }
@@ -166,6 +177,7 @@ int main(void)
     printf("#test heart\n");
     printf("#sec(ms) value\n");
 #define SPAN 150
+#define THRESHOLD 700
     int i, value[SPAN], sec = 0, total = 0;
     
     for (i = 0; i < SPAN; i++) value[i] = 0;
@@ -175,8 +187,8 @@ int main(void)
 	total -= value[sec%SPAN];
 	value[sec%SPAN] = adc_get_value(0);
 	total += value[sec%SPAN];
-	printf("%5d %d %4.1f ",sec,value[sec%SPAN], total*1.0/SPAN);
-	if (value[sec%SPAN] >  total*1.0/SPAN) {
+	printf("%5d %3d %4.1f ",sec,value[sec%SPAN], total*1.0/SPAN);
+	if (value[sec%SPAN] >  THRESHOLD) {
 	    printf("O\n");
 	    judge = 1;
 	} else {
