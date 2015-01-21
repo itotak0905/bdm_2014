@@ -2,7 +2,7 @@
 *.a
 *~
 *.wav
-a.out
+*.out
 bin
 jtag
 GPATH

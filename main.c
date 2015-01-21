@@ -5,9 +5,9 @@
 #define UDP_PORT_BRAIN 50000
 #define UDP_PORT_HEART 50010
 
-#define BDM_OUTPUT
+//#define BDM_OUTPUT
 //#define BDM_BRAIN
-//#define BDM_HEART
+#define BDM_HEART
 
 //出力系
 #ifdef BDM_OUTPUT
@@ -37,8 +37,8 @@ int main(void)
 
     while(1){
 
-	//心拍の処理 (1ms周期)
-	if (counter % 1000 == 0) {
+	//心拍の処理 (0.1ms周期)
+	if (counter % 100 == 0) {
 	    addrlen = sizeof(sock_heart);
 	    n = recvfrom(sock_heart, buf, sizeof(buf), 0, (struct sockaddr *)&addr_heart, &addrlen);
 	    if (n < 1) {
@@ -51,10 +51,10 @@ int main(void)
 		}
 	    } else {
 		int num;
-		printf("received data heart\n");
+		/* printf("received data heart\n"); */
 		sscanf(buf, "heart %d %d\n", &num, &judge);
-		printf("%s\n",buf);
-		printf("%d %d\n", num, judge);
+		/* printf("%s\n",buf); */
+		printf("heart %d %d\n", num, judge);
 	    }
 
 	    if (judge == 1) {
@@ -90,7 +90,7 @@ int main(void)
 	    }
 	    if (brain_counter <= 10) {
 		if (meditation >= 0) {
-		    fcled_set_color_value(RED, 100 - past_meditation + brain_counter*(meditation - past_meditation)/10.0);
+		    fcled_set_color_value(RED, past_meditation + brain_counter*(meditation - past_meditation)/10.0);
 		    fcled_set_color_value(BLUE, past_meditation + brain_counter*(meditation - past_meditation)/10.0);
 		    fcled_set_data(ON);
 		} else {
@@ -177,7 +177,7 @@ int main(void)
     printf("#test heart\n");
     printf("#sec(ms) value\n");
 #define SPAN 150
-#define THRESHOLD 700
+#define THRESHOLD 800
     int i, value[SPAN], sec = 0, total = 0;
     
     for (i = 0; i < SPAN; i++) value[i] = 0;

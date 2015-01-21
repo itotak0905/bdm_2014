@@ -8,12 +8,10 @@
 static fcled_t fcled_status;
 static led_t rled_status;
 
-static int counter;
 
 int all_led_init(void)
 { 
     // Set fcled pin to output mode
-    counter = 0;
 
     pinMode(FCLED_R_PIN, OUTPUT);
     pinMode(FCLED_G_PIN, OUTPUT);
@@ -87,13 +85,15 @@ int rled_set_duty(int new_duty)
 
 int fcled_status_update(void)
 {
-    digitalWrite(FCLED_R_PIN, 0);
+    static int counter = 0;
+
+    digitalWrite(FCLED_R_PIN, 1);
     digitalWrite(FCLED_G_PIN, 0);
     digitalWrite(FCLED_B_PIN, 0);
 
     if (fcled_status.data) {
 	if (fcled_status.color_r > counter) {
-	    digitalWrite(FCLED_R_PIN, 1);
+	    digitalWrite(FCLED_R_PIN, 0);
 	}
 	if (fcled_status.color_g > counter) {
 	    digitalWrite(FCLED_G_PIN, 1);

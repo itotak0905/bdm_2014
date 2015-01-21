@@ -13,7 +13,11 @@ int udp_receive_init(struct sockaddr_in *p_addr, int port)
 
     p_addr->sin_family = AF_INET;
     p_addr->sin_port = htons(port);
-    p_addr->sin_addr.s_addr = INADDR_ANY;
+    /* p_addr->sin_addr.s_addr = INADDR_ANY; */
+    if (inet_aton("127.0.0.1", &p_addr->sin_addr) == 0) {
+    	printf("error:inet_aton\n");
+    	return -1;
+    }
 
     if (bind(sock, (struct sockaddr *)p_addr, sizeof(*p_addr)) == -1) {
     	perror("bind:");

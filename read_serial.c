@@ -66,7 +66,7 @@ void read_payload(uint8_t payload[], int plength)
                     if (payload[head + 1] == 200){
                         printf("POOR_SIGNAL:electrodes aren't contacting a skin. ");
                     }else{
-                        printf("POOR_SIGNAL:%d ", payload[head + 1]);
+                        /* printf("POOR_SIGNAL:%d ", payload[head + 1]); */
                     }
                     output_flag = true;
                     break;
@@ -79,7 +79,7 @@ void read_payload(uint8_t payload[], int plength)
                         printf("ATTENTION:unable to calculate. ");
 			attention = -1;
                     }else{
-                        printf("ATTENTION:%d ", payload[head + 1]);
+                        /* printf("ATTENTION:%d ", payload[head + 1]); */
 			attention = payload[head + 1];
                     }
                     output_flag = true;
@@ -89,7 +89,7 @@ void read_payload(uint8_t payload[], int plength)
                         printf("MEDITATION:unable to calculate. ");
 			meditation = -1;
                     }else{
-                        printf("MEDITATION:%d ", payload[head + 1]);
+                        /* printf("MEDITATION:%d ", payload[head + 1]); */
 			meditation = payload[head + 1];
                     }
                     output_flag = true;
